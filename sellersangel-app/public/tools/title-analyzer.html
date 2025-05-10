@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sellers Angel – Title Analyzer</title>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <header>
+    <div class="logo">
+      <img src="/images/angel-logo.png" alt="Sellers Angel Logo" class="logo-img">
+      <span>Sellers Angel</span>
+    </div>
+    <nav class="nav">
+      <a href="/index.html">Home</a>
+      <a href="/tools/index.html" class="active">Tools</a>
+    </nav>
+    <button id="theme-toggle">🌙</button>
+  </header>
+  <main class="container">
+    <h1>Title Analyzer</h1>
+    <p>Paste your Etsy listing title to get an SEO score and tips.</p>
+    <form id="title-analyzer-form">
+      <input type="text" name="title" placeholder="Enter your listing title" required aria-label="Etsy listing title">
+      <button type="submit">Analyze Title</button>
+    </form>
+    <div id="results"></div>
+  </main>
+<footer>
+  <p>The term 'Etsy' is a trademark of Etsy, Inc. This application uses the Etsy API but is not endorsed or certified by Etsy.</p>
+  <p>© 2025 SellersAngel.com All rights reserved.</p>
+</footer>
+  <script>
+
+
+    document.getElementById('title-analyzer-form').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const title = e.target.title.value.trim();
+      const results = document.getElementById('results');
+      let score = 0;
+      let tips = [];
+
+      if (title.length <= 140) score += 30;
+      else tips.push("Shorten your title to 140 characters or less.");
+      if (title.includes(',')) score += 30;
+      else tips.push("Use commas to separate keywords for better SEO.");
+      const words = title.toLowerCase().split(/\W+/).filter(Boolean);
+      const uniqueWords = new Set(words);
+      if (uniqueWords.size >= words.length * 0.8) score += 40;
+      else tips.push("Avoid repeating words to maximize keyword diversity.");
+
+      results.innerHTML = `
+        <h3>SEO Score: ${score}/100</h3>
+        <p><b>Tips to Improve:</b></p>
+        <ul>${tips.length ? tips.map(tip => `<li>${tip}</li>`).join('') : '<li>Your title is solid!</li>'}</ul>
+      `;
+    });
+  </script>
+<script src="/scripts.js"></script>
+</body>
+</html>

@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sellers Angel – Tag Comparator</title>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <header>
+    <div class="logo">
+      <img src="/images/angel-logo.png" alt="Sellers Angel Logo" class="logo-img">
+      <span>Sellers Angel</span>
+    </div>
+    <nav class="nav">
+      <a href="/index.html">Home</a>
+      <a href="/tools/index.html" class="active">Tools</a>
+    </nav>
+    <button id="theme-toggle">🌙</button>
+  </header>
+  <main class="container">
+    <h1>Tag Comparator</h1>
+    <p>Enter tags from two Etsy listings to compare them.</p>
+    <form id="tag-comparator-form">
+      <label for="tagsA">Tags from Listing A (comma-separated):</label>
+      <input type="text" name="tagsA" placeholder="e.g. handmade, necklace, gift" required aria-label="Tags for listing A">
+      <label for="tagsB">Tags from Listing B (comma-separated):</label>
+      <input type="text" name="tagsB" placeholder="e.g. jewelry, custom, birthday" required aria-label="Tags for listing B">
+      <button type="submit">Compare Tags</button>
+    </form>
+    <div id="results"></div>
+  </main>
+<footer>
+  <p>The term 'Etsy' is a trademark of Etsy, Inc. This application uses the Etsy API but is not endorsed or certified by Etsy.</p>
+  <p>© 2025 SellersAngel.com All rights reserved.</p>
+</footer>
+  <script>
+
+
+    document.getElementById('tag-comparator-form').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const tagsA = e.target.tagsA.value.split(',').map(t => t.trim().toLowerCase()).filter(Boolean);
+      const tagsB = e.target.tagsB.value.split(',').map(t => t.trim().toLowerCase()).filter(Boolean);
+      const results = document.getElementById('results');
+
+      if (!tagsA.length || !tagsB.length) {
+        results.innerHTML = '<p style="color: red;">Please enter tags for both listings.</p>';
+        return;
+      }
+
+      const setA = new Set(tagsA);
+      const setB = new Set(tagsB);
+      const inBoth = [...setA].filter(t => setB.has(t));
+      const onlyA = [...setA].filter(t => !setB.has(t));
+      const onlyB = [...setB].filter(t => !setA.has(t));
+
+      results.innerHTML = `
+        <h3>✅ Tags in Both Listings (${inBoth.length}):</h3>
+        <p>${inBoth.join(', ') || 'None'}</p>
+        <h3>➕ Only in Listing A (${onlyA.length}):</h3>
+        <p>${onlyA.join(', ') || 'None'}</p>
+        <h3>➕ Only in Listing B (${onlyB.length}):</h3>
+        <p>${onlyB.join(', ') || 'None'}</p>
+      `;
+    });
+  </script>
+<script src="/scripts.js"></script>
+</body>
+</html>

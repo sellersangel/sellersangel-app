@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sellers Angel – Coming Soon</title>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <header>
+    <div class="logo">
+      <img src="/images/angel-logo.png" alt="Sellers Angel Logo" class="logo-img">
+      <span>Sellers Angel</span>
+    </div>
+    <button id="theme-toggle">🌙</button>
+  </header>
+  <main class="container">
+    <h1>Sellers Angel</h1>
+    <h2>Coming Soon 🚀</h2>
+    <p>We’re building a free suite of tools to help Etsy sellers grow smarter, faster, and stress-free. Be the first to know when we launch!</p>
+    <form id="contact-form" action="https://formspree.io/f/mjkworpe" method="POST" aria-label="Email subscription form" role="form">
+      <input type="email" name="email" placeholder="Enter your email" required aria-label="Your email address">
+      <button type="submit">Notify Me</button>
+    </form>
+    <div id="thank-you-message" style="display:none; margin-top: 20px; font-weight: bold; color: #1a3c6b;">
+      🎉 Thank you! You’ll be notified when we launch.
+    </div>
+    <a href="/tools/index.html" class="cta-link">Preview the Tool Suite 🚀</a>
+    <div class="social-icons">
+      <a href="#" title="Facebook">📘</a>
+      <a href="#" title="Instagram">📸</a>
+      <a href="#" title="Twitter">🐦</a>
+    </div>
+  </main>
+<footer>
+  <p>The term 'Etsy' is a trademark of Etsy, Inc. This application uses the Etsy API but is not endorsed or certified by Etsy.</p>
+  <p>© 2025 SellersAngel.com All rights reserved.</p>
+</footer>
+  <script>
+    document.getElementById('contact-form').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const form = e.target;
+      const formData = new FormData(form);
+      fetch('https://formspree.io/f/mjkworpe', {
+        method: 'POST',
+        headers: { 'Accept': 'application/json' },
+        body: formData
+      }).then(response => {
+        if (response.ok) {
+          document.getElementById('thank-you-message').style.display = 'block';
+          form.reset();
+        } else {
+          alert('There was a problem submitting the form.');
+        }
+      }).catch(error => {
+        alert('There was a problem submitting the form.');
+      });
+    });
+
+
+    });
+  </script>
+<script src="/scripts.js"></script>
+</body>
+</html>

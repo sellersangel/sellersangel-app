@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sellers Angel – Tag Optimizer</title>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <header>
+    <div class="logo">
+      <img src="/images/angel-logo.png" alt="Sellers Angel Logo" class="logo-img">
+      <span>Sellers Angel</span>
+    </div>
+    <nav class="nav">
+      <a href="/index.html">Home</a>
+      <a href="/tools/index.html" class="active">Tools</a>
+    </nav>
+    <button id="theme-toggle">🌙</button>
+  </header>
+  <main class="container">
+    <h1>Tag Optimizer</h1>
+    <p>Enter your Etsy tags to get suggestions for better SEO.</p>
+    <form id="tag-optimizer-form">
+      <label for="category">Product Category:</label>
+      <select name="category" required aria-label="Product category">
+        <option value="" disabled selected>Select a category</option>
+        <option value="jewelry">Jewelry</option>
+        <option value="home-decor">Home Decor</option>
+        <option value="clothing">Clothing</option>
+        <option value="art">Art</option>
+        <option value="accessories">Accessories</option>
+      </select>
+      <label for="tags">Your Tags (comma-separated):</label>
+      <input type="text" name="tags" placeholder="e.g. handmade, necklace, gift" required aria-label="Your Etsy tags">
+      <button type="submit">Optimize Tags</button>
+    </form>
+    <div id="results"></div>
+  </main>
+<footer>
+  <p>The term 'Etsy' is a trademark of Etsy, Inc. This application uses the Etsy API but is not endorsed or certified by Etsy.</p>
+  <p>© 2025 SellersAngel.com All rights reserved.</p>
+</footer>
+  <script src="/scripts.js"></script>
+  <script>
+    document.getElementById('tag-optimizer-form').addEventListener('submit', async function(e) {
+      e.preventDefault();
+      const category = e.target.category.value;
+      const tags = e.target.tags.value.split(',').map(t => t.trim()).filter(Boolean);
+      const results = document.getElementById('results');
+      try {
+        const response = await fetch('/api/optimize-tags', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ category, tags })
+        });
+        const data = await response.json();
+        results.innerHTML = `
+          <h3>Tag Analysis:</h3>
+          <ul>${data.analysis.map(item => `<li>${item}</li>`).join('')}</ul>
+          <h3>Suggested Tags:</h3>
+          <p>${data.suggestions.join(', ')}</p>
+          <h3>Tips:</h3>
+          <ul>${data.tips.map(tip => `<li>${tip}</li>`).join('')}</ul>
+        `;
+      } catch (error) {
+        results.innerHTML = '<p style="color: red;">Error optimizing tags. Please try again.</p>';
+      }
+    });
+  </script>
+<script src="/scripts.js"></script>
+</body>
+</html>

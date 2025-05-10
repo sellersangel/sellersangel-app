@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sellers Angel – Competitor Analyzer</title>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <header>
+    <div class="logo">
+      <img src="/images/angel-logo.png" alt="Sellers Angel Logo" class="logo-img">
+      <span>Sellers Angel</span>
+    </div>
+    <nav class="nav">
+      <a href="/index.html">Home</a>
+      <a href="/tools/index.html" class="active">Tools</a>
+    </nav>
+    <button id="theme-toggle">🌙</button>
+  </header>
+  <main class="container">
+    <h1>Competitor Analyzer</h1>
+    <p>Enter a competitor’s Etsy listing URL to analyze their strategy (API approval pending).</p>
+    <form id="competitor-analyzer-form">
+      <label for="url">Competitor Listing URL:</label>
+      <input type="url" name="url" placeholder="https://www.etsy.com/listing/..." required aria-label="Competitor Etsy listing URL">
+      <button type="submit">Analyze Competitor</button>
+    </form>
+    <div id="results"></div>
+  </main>
+<footer>
+  <p>The term 'Etsy' is a trademark of Etsy, Inc. This application uses the Etsy API but is not endorsed or certified by Etsy.</p>
+  <p>© 2025 SellersAngel.com All rights reserved.</p>
+</footer>
+  <script>
+
+    document.getElementById('competitor-analyzer-form').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const url = e.target.url.value.trim();
+      const results = document.getElementById('results');
+
+      // Validate URL (basic check for Etsy listing format)
+      if (!url.includes('etsy.com/listing')) {
+        results.innerHTML = '<p style="color: red;">Please enter a valid Etsy listing URL (e.g., https://www.etsy.com/listing/...).</p>';
+        return;
+      }
+
+      // Simulated competitor data (to be replaced with Etsy API data)
+      const simulatedData = {
+        title: "Handmade Silver Necklace, Minimalist Jewelry, Gift for Her, Wedding Accessory",
+        tags: ['handmade', 'silver', 'necklace', 'minimalist', 'jewelry', 'gift', 'wedding', 'accessory', 'elegant', 'custom'],
+        description: "This handmade silver necklace is the perfect minimalist jewelry piece for any occasion. Crafted with care, it makes a great gift for her, especially for weddings or anniversaries. The design is elegant and custom-made to suit your style. Order now for a special touch to your collection.",
+        price: 45.00
+      };
+
+      // Analyze data
+      const titleLength = simulatedData.title.length;
+      const tagCount = simulatedData.tags.length;
+      const descriptionLength = simulatedData.description.length;
+      const price = simulatedData.price;
+
+      // Generate insights and tips
+      let insights = [];
+      let tips = [];
+
+      // Title analysis
+      insights.push(`<b>Title Length:</b> ${titleLength} characters`);
+      if (titleLength > 140) tips.push("Their title is too long (>140 characters). Keep yours under 140 for better SEO.");
+      else if (titleLength < 50) tips.push("Their title is short (<50 characters). Aim for 70-140 characters to maximize SEO.");
+
+      // Tags analysis
+      insights.push(`<b>Tags:</b> ${tagCount} (${simulatedData.tags.join(', ')})`);
+      if (tagCount < 10) tips.push("They use fewer than 10 tags. Aim for 10-13 tags to improve discoverability.");
+      else if (tagCount > 13) tips.push("They use more than 13 tags, which Etsy ignores. Use exactly 13 tags for best results.");
+
+      // Description analysis
+      insights.push(`<b>Description Length:</b> ${descriptionLength} characters`);
+      if (descriptionLength < 200) tips.push("Their description is too short (<200 characters). Write at least 200 characters for better SEO.");
+      else if (descriptionLength > 1000) tips.push("Their description is too long (>1000 characters). Keep yours under 1000 for readability.");
+
+      // Price analysis
+      insights.push(`<b>Price:</b> $${price.toFixed(2)}`);
+      if (price < 20) tips.push("Their price is low (<$20), which may undervalue the product. Consider pricing higher to reflect quality.");
+      else if (price > 80) tips.push("Their price is high (>$80). Ensure your price is competitive or justifies the value.");
+
+      results.innerHTML = `
+        <h3>Competitor Insights:</h3>
+        <ul>${insights.map(insight => `<li>${insight}</li>`).join('')}</ul>
+        <h3>Tips for Your Listing:</h3>
+        <ul>${tips.length ? tips.map(tip => `<li>${tip}</li>`).join('') : '<li>Their listing is well-optimized. Match their strategy!</li>'}</ul>
+        <p>🚧 Note: Full competitor analysis coming soon with Etsy API integration.</p>
+      `;
+    });
+  </script>
+<script src="/scripts.js"></script>
+</body>
+</html>

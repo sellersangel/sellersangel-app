@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sellers Angel – Price Analyzer</title>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <header>
+    <div class="logo">
+      <img src="/images/angel-logo.png" alt="Sellers Angel Logo" class="logo-img">
+      <span>Sellers Angel</span>
+    </div>
+    <nav class="nav">
+      <a href="/index.html">Home</a>
+      <a href="/tools/index.html" class="active">Tools</a>
+    </nav>
+    <button id="theme-toggle">🌙</button>
+  </header>
+  <main class="container">
+    <h1>Price Analyzer</h1>
+    <p>Enter your listing details to get a suggested price range (API approval pending).</p>
+    <form id="price-analyzer-form">
+      <label for="category">Product Category:</label>
+      <select name="category" required aria-label="Product category">
+        <option value="" disabled selected>Select a category</option>
+        <option value="jewelry">Jewelry</option>
+        <option value="home-decor">Home Decor</option>
+        <option value="clothing">Clothing</option>
+        <option value="art">Art</option>
+        <option value="accessories">Accessories</option>
+      </select>
+      <label for="material-cost">Material Cost ($):</label>
+      <input type="number" name="material-cost" placeholder="e.g. 10" min="0" step="0.01" required aria-label="Material cost in dollars">
+      <label for="profit-margin">Desired Profit Margin (%):</label>
+      <input type="number" name="profit-margin" placeholder="e.g. 30" min="0" max="100" step="1" required aria-label="Desired profit margin percentage">
+      <label for="current-price">Your Current Price ($):</label>
+      <input type="number" name="current-price" placeholder="e.g. 25" min="0" step="0.01" required aria-label="Current listing price in dollars">
+      <button type="submit">Analyze Price</button>
+    </form>
+    <div id="results"></div>
+  </main>
+<footer>
+  <p>The term 'Etsy' is a trademark of Etsy, Inc. This application uses the Etsy API but is not endorsed or certified by Etsy.</p>
+  <p>© 2025 SellersAngel.com All rights reserved.</p>
+</footer>
+  <script>
+
+    document.getElementById('price-analyzer-form').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const category = e.target.category.value;
+      const materialCost = parseFloat(e.target['material-cost'].value);
+      const profitMargin = parseFloat(e.target['profit-margin'].value);
+      const currentPrice = parseFloat(e.target['current-price'].value);
+      const results = document.getElementById('results');
+
+      // Validate inputs
+      if (isNaN(materialCost) || isNaN(profitMargin) || isNaN(currentPrice) || materialCost < 0 || profitMargin < 0 || currentPrice < 0) {
+        results.innerHTML = '<p style="color: red;">Please enter valid numbers for all fields.</p>';
+        return;
+      }
+
+      // Simulated pricing ranges based on category (to be replaced with Etsy API data)
+      const pricingRanges = {
+        jewelry: { base: 15, multiplier: 2.5, rangeLow: 20, rangeHigh: 50 },
+        'home-decor': { base: 20, multiplier: 2.0, rangeLow: 30, rangeHigh: 80 },
+        clothing: { base: 25, multiplier: 2.2, rangeLow: 35, rangeHigh: 90 },
+        art: { base: 30, multiplier: 2.8, rangeLow: 40, rangeHigh: 120 },
+        accessories: { base: 10, multiplier: 2.0, rangeLow: 15, rangeHigh: 40 }
+      };
+
+      const pricing = pricingRanges[category];
+      const basePrice = materialCost * pricing.multiplier + pricing.base;
+      const profitAdjustedPrice = basePrice * (1 + profitMargin / 100);
+      const suggestedPriceLow = Math.max(pricing.rangeLow, profitAdjustedPrice * 0.9).toFixed(2);
+      const suggestedPriceHigh = Math.min(pricing.rangeHigh, profitAdjustedPrice * 1.1).toFixed(2);
+
+      // Feedback on current price
+      let feedback = '';
+      if (currentPrice < suggestedPriceLow) {
+        feedback = `Your price ($${currentPrice}) is below the suggested range. Consider increasing it to $${suggestedPriceLow} or higher to align with market trends.`;
+      } else if (currentPrice > suggestedPriceHigh) {
+        feedback = `Your price ($${currentPrice}) is above the suggested range. Consider lowering it to $${suggestedPriceHigh} or below to stay competitive.`;
+      } else {
+        feedback = `Your price ($${currentPrice}) is within the suggested range ($${suggestedPriceLow} - $${suggestedPriceHigh}). Great job!`;
+      }
+
+      results.innerHTML = `
+        <h3>Suggested Price Range:</h3>
+        <p>$${suggestedPriceLow} - $${suggestedPriceHigh}</p>
+        <p><b>Feedback:</b> ${feedback}</p>
+        <p>🚧 Note: Enhanced pricing data coming soon with Etsy API integration.</p>
+      `;
+    });
+  </script>
+<script src="/scripts.js"></script>
+</body>
+</html>

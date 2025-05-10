@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sellers Angel – Listing Grader</title>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <header>
+    <div class="logo">
+      <img src="/images/angel-logo.png" alt="Sellers Angel Logo" class="logo-img">
+      <span>Sellers Angel</span>
+    </div>
+    <nav class="nav">
+      <a href="/index.html">Home</a>
+      <a href="/tools/index.html" class="active">Tools</a>
+    </nav>
+    <button id="theme-toggle">🌙</button>
+  </header>
+  <main class="container">
+    <h1>Listing Grader</h1>
+    <p>Enter your listing details to get an SEO score and tips.</p>
+    <form id="listing-grader-form">
+      <label for="title">Listing Title:</label>
+      <input type="text" name="title" placeholder="Enter your listing title" required aria-label="Etsy listing title">
+      <label for="tags">Tags (comma-separated):</label>
+      <input type="text" name="tags" placeholder="e.g. handmade, necklace, gift" required aria-label="Etsy listing tags">
+      <label for="description">Description:</label>
+      <textarea name="description" placeholder="Enter your listing description" required aria-label="Etsy listing description"></textarea>
+      <button type="submit">Grade Listing</button>
+    </form>
+    <div id="results"></div>
+  </main>
+<footer>
+  <p>The term 'Etsy' is a trademark of Etsy, Inc. This application uses the Etsy API but is not endorsed or certified by Etsy.</p>
+  <p>© 2025 SellersAngel.com All rights reserved.</p>
+</footer>
+  <script>
+
+
+    document.getElementById('listing-grader-form').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const title = e.target.title.value.trim();
+      const tags = e.target.tags.value.split(',').map(t => t.trim()).filter(Boolean);
+      const description = e.target.description.value.trim();
+      const results = document.getElementById('results');
+      let score = 0;
+      let tips = [];
+
+      // Title length check
+      if (title.length <= 140) score += 30;
+      else tips.push("Shorten your title to 140 characters or less.");
+
+      // Tags count check
+      if (tags.length >= 10 && tags.length <= 13) score += 30;
+      else tips.push("Use 10-13 unique tags for optimal SEO.");
+
+      // Description length check
+      if (description.length >= 200) score += 20;
+      else tips.push("Write a description of at least 200 characters.");
+
+      // Keyword overlap check
+      const descWords = description.toLowerCase().split(/\W+/).filter(Boolean);
+      const titleWords = title.toLowerCase().split(/\W+/).filter(Boolean);
+      const keywordOverlap = titleWords.some(word => descWords.includes(word));
+      if (keywordOverlap) score += 20;
+      else tips.push("Include title keywords in your description.");
+
+      // Render results
+      results.innerHTML = `
+        <h3>SEO Score: ${score}/100</h3>
+        <p><b>Tips to Improve:</b></p>
+        <ul>${tips.length ? tips.map(tip => `<li>${tip}</li>`).join('') : '<li>Your listing is well-optimized!</li>'}</ul>
+      `;
+    });
+  </script>
+<script src="/scripts.js"></script>
+</body>
+</html>

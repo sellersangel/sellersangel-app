@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sellers Angel – Keyword Suggester</title>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <header>
+    <div class="logo">
+      <img src="/images/angel-logo.png" alt="Sellers Angel Logo" class="logo-img">
+      <span>Sellers Angel</span>
+    </div>
+    <nav class="nav">
+      <a href="/index.html">Home</a>
+      <a href="/tools/index.html" class="active">Tools</a>
+    </nav>
+    <button id="theme-toggle">🌙</button>
+  </header>
+  <main class="container">
+    <h1>Keyword Suggester</h1>
+    <p>Enter a few seed keywords to get suggestions for your Etsy listing (API approval pending).</p>
+    <form id="keyword-suggester-form">
+      <label for="keywords">Seed Keywords (comma-separated):</label>
+      <input type="text" name="keywords" placeholder="e.g. handmade, necklace, gift" required aria-label="Seed keywords for suggestion">
+      <button type="submit">Suggest Keywords</button>
+    </form>
+    <div id="results"></div>
+  </main>
+<footer>
+  <p>The term 'Etsy' is a trademark of Etsy, Inc. This application uses the Etsy API but is not endorsed or certified by Etsy.</p>
+  <p>© 2025 SellersAngel.com All rights reserved.</p>
+</footer>
+  <script>
+
+
+    document.getElementById('keyword-suggester-form').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const inputKeywords = e.target.keywords.value.split(',').map(k => k.trim().toLowerCase()).filter(Boolean);
+      const results = document.getElementById('results');
+
+      if (!inputKeywords.length) {
+        results.innerHTML = '<p style="color: red;">Please enter at least one keyword.</p>';
+        return;
+      }
+
+      // Simulated keyword database (to be replaced with Etsy API data)
+      const keywordDatabase = [
+        'handmade', 'vintage', 'gift', 'necklace', 'jewelry', 'custom', 'birthday', 'wedding',
+        'boho', 'minimalist', 'artisan', 'craft', 'unique', 'personalized', 'decor', 'home',
+        'fashion', 'accessory', 'statement', 'trendy', 'elegant', 'rustic', 'modern', 'cozy'
+      ];
+
+      // Simple suggestion logic: match related keywords
+      const suggestions = keywordDatabase.filter(keyword => 
+        !inputKeywords.includes(keyword) && 
+        inputKeywords.some(input => keyword.includes(input) || input.includes(keyword))
+      );
+
+      // Add some related keywords based on common Etsy trends
+      const additionalSuggestions = [];
+      if (inputKeywords.some(k => ['necklace', 'jewelry', 'accessory'].includes(k))) {
+        additionalSuggestions.push('pendant', 'charm', 'beaded');
+      }
+      if (inputKeywords.some(k => ['gift', 'birthday', 'wedding'].includes(k))) {
+        additionalSuggestions.push('present', 'special', 'celebration');
+      }
+      if (inputKeywords.some(k => ['handmade', 'craft', 'artisan'].includes(k))) {
+        additionalSuggestions.push('diy', 'bespoke', 'oneofakind');
+      }
+
+      const finalSuggestions = [...new Set([...suggestions, ...additionalSuggestions])].slice(0, 10);
+
+      results.innerHTML = `
+        <h3>Suggested Keywords (${finalSuggestions.length}):</h3>
+        <p>${finalSuggestions.length ? finalSuggestions.join(', ') : 'No suggestions found. Try different keywords!'}</p>
+        <p>🚧 Note: Enhanced suggestions coming soon with Etsy API integration.</p>
+      `;
+    });
+  </script>
+<script src="/scripts.js"></script>
+</body>
+</html>

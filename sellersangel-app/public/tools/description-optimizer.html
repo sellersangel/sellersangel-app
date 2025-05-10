@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sellers Angel – Description Optimizer</title>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <header>
+    <div class="logo">
+      <img src="/images/angel-logo.png" alt="Sellers Angel Logo" class="logo-img">
+      <span>Sellers Angel</span>
+    </div>
+    <nav class="nav">
+      <a href="/index.html">Home</a>
+      <a href="/tools/index.html" class="active">Tools</a>
+    </nav>
+    <button id="theme-toggle">🌙</button>
+  </header>
+  <main class="container">
+    <h1>Description Optimizer</h1>
+    <p>Enter your Etsy listing description to optimize it for SEO and readability.</p>
+    <form id="description-optimizer-form">
+      <label for="description">Listing Description:</label>
+      <textarea name="description" placeholder="Enter your listing description" required aria-label="Etsy listing description"></textarea>
+      <button type="submit">Optimize Description</button>
+    </form>
+    <div id="results"></div>
+  </main>
+<footer>
+  <p>The term 'Etsy' is a trademark of Etsy, Inc. This application uses the Etsy API but is not endorsed or certified by Etsy.</p>
+  <p>© 2025 SellersAngel.com All rights reserved.</p>
+</footer>
+  <script>
+  
+
+    document.getElementById('description-optimizer-form').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const description = e.target.description.value.trim();
+      const results = document.getElementById('results');
+      let score = 0;
+      let tips = [];
+
+      // Length check (ideal: 200-1000 characters)
+      if (description.length >= 200 && description.length <= 1000) score += 30;
+      else if (description.length < 200) tips.push("Increase your description to at least 200 characters for better SEO.");
+      else tips.push("Shorten your description to under 1000 characters for better readability.");
+
+      // Keyword density (simple check for repeated words, assuming keywords are repeated)
+      const words = description.toLowerCase().split(/\W+/).filter(Boolean);
+      const wordCount = words.length;
+      const wordFreq = {};
+      words.forEach(word => wordFreq[word] = (wordFreq[word] || 0) + 1);
+      const maxFreq = Math.max(...Object.values(wordFreq));
+      const keywordDensity = (maxFreq / wordCount) * 100;
+      if (keywordDensity >= 2 && keywordDensity <= 5) score += 30;
+      else if (keywordDensity < 2) tips.push("Increase keyword repetition (aim for 2-5% density).");
+      else tips.push("Reduce keyword repetition (aim for 2-5% density).");
+
+      // Readability (simple check: average words per sentence)
+      const sentences = description.split(/[.!?]+/).filter(Boolean);
+      const avgWordsPerSentence = wordCount / sentences.length;
+      if (avgWordsPerSentence <= 20) score += 20;
+      else tips.push("Shorten sentences (aim for 20 words or less per sentence).");
+
+      // Call-to-action check
+      const ctaPhrases = ['buy now', 'shop now', 'check out', 'order today', 'get yours'];
+      const hasCTA = ctaPhrases.some(phrase => description.toLowerCase().includes(phrase));
+      if (hasCTA) score += 20;
+      else tips.push("Add a call-to-action (e.g., 'Buy now', 'Shop today').");
+
+      results.innerHTML = `
+        <h3>Optimization Score: ${score}/100</h3>
+        <p><b>Tips to Improve:</b></p>
+        <ul>${tips.length ? tips.map(tip => `<li>${tip}</li>`).join('') : '<li>Your description is well-optimized!</li>'}</ul>
+      `;
+    });
+  </script>
+<script src="/scripts.js"></script>
+</body>
+</html>
